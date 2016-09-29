@@ -17,7 +17,7 @@ class ParseError {
 
 const splitter = /\s|(\(|\))/
 // split on white space and parens, while keeping parens, then filter out empty strings and undefined
-function lex(str) {
+export function lex(str) {
   return str.split(splitter).filter(Boolean)
 }
 
@@ -25,7 +25,7 @@ const identifierMatch = /^[A-Za-z\-\+\!\?\*\>\<][\w\-\+\!\?\*\>\<]*$/
 const symbolMatch = /^\'[A-Za-z\-\+\!\?\*\>\<][\w\-\+\!\?\*\>\<]*$/
 const numberMatch = /^\d+$/
 // identifier, symbol, string, number, boolean
-function tokenize(lexemes) {
+export function tokenize(lexemes) {
   return lexemes.map(lexeme => {
     switch (lexeme) {
       case '(':
@@ -68,14 +68,15 @@ function checkParens(tokens) {
   }
 }
 
-function parseExpression(tokens) {
-  let expression = []
+function _parseTokens(tokens) {
+  const expression = []
 
+  // returns 1 expression
   while(tokens) {
     const token = tokens.shift()
     switch (token.type) {
       case 'open-paren':
-        expression.push(parseExpression(tokens))
+        expression.push(_parseTokens(tokens))
         break
       case 'close-paren':
         return expression
@@ -87,10 +88,15 @@ function parseExpression(tokens) {
   }
 }
 
-function parseTokens(tokens) {
+export function parseTokens(tokens) {
+  const expressions = []
   checkParens(tokens)
-  if (tokens.shift().type != 'open-paren') throw 'cannot parse'
-  return parseExpression(tokens)
+
+  while(tokens.length > 0) {
+    if (tokens.shift().type != 'open-paren') throw 'cannot parse'
+    expressions.push(_parseTokens(tokens))
+  }
+  return expressions
 }
 
 export function parseStr(str) {

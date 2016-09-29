@@ -1,9 +1,9 @@
-import {parseStr} from './parser'
+const fs = require('fs')
 import {evalStr} from './interpreter'
 
-// lexer : string -> lexemes -> tokens
-// parser : tokens -> ast
-// interpreter : ast -> result
-
-const input = '(+ 3 4 (- 4 2))'
-console.log(evalStr(input))
+// read from file
+const srcFile = process.argv[2]
+fs.readFile(srcFile, 'utf-8', (err, data) => {
+  if (err) throw err;
+  console.log(':', evalStr(data))
+});

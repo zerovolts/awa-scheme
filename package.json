@@ -1,14 +1,14 @@
 {
-  "name": "scheme",
-  "version": "1.0.0",
-  "description": "",
+  "name": "awa-scheme",
+  "version": "0.0.1",
+  "description": "Scheme Interpreter for Node",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "babel src -d app",
     "start": "node app"
   },
-  "author": "",
+  "author": "Zach Stone",
   "license": "ISC",
   "babel": {
     "presets": [
